@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="text-white bg-gray-900">
@@ -59,6 +60,7 @@
             Powered by <a href="#" class="underline hover:text-gray-300">IGDB API</a>
         </div>
     </footer>
+    @livewireScripts
 </body>
 
 </html>
