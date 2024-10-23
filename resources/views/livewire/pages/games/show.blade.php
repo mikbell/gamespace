@@ -1,48 +1,29 @@
 <x-app-layout>
     <div class="container px-4 mx-auto"> <!--Container -->
         <div class="flex flex-col pb-12 border-b border-gray-800 lg:flex-row"> <!-- Game Details -->
-            <img src="{{ str_replace('thumb', 'cover_big', $game['cover']['url']) }}" alt="">
+            <div class="flex-none bg-gray-600 w-60 h-96">
+            </div>
             <div class="ml-0 lg:ml-12">
-                <h2 class="text-4xl font-semibold leading-tight">{{ $game['name'] }}</h2>
+                <h2 class="text-4xl font-semibold leading-tight">Game Title</h2>
                 <div>
-                    <span>
-                        @foreach ($game['genres'] as $genre)
-                            {{ $genre['name'] }},
-                        @endforeach
-                    </span>
+                    <span>Genre, Genre</span>
                     &middot;
-                    <span>{{ $game['involved_companies'][0]['company']['name'] }}</span>
+                    <span>Publisher</span>
                     &middot;
-                    <span>
-                        @foreach ($game['platforms'] as $platform)
-                            {{ $platform['abbreviation'] }},
-                        @endforeach
-                    </span>
+                    <span>Console</span>
                 </div>
 
                 <div class="flex flex-wrap items-center mt-8">
                     <div class="flex items-center">
                         <div class="w-16 h-16 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">
-                                @if (array_key_exists('rating', $game))
-                                    {{ number_format($game['rating']) . '%' }}
-                                @else
-                                    0%
-                                @endif
-                            </div>
+                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
                         </div>
                         <div class="ml-4 text-xs">
                             Member <br> score
                         </div>
 
                         <div class="w-16 h-16 ml-12 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">
-                                @if (array_key_exists('aggregated_rating', $game))
-                                    {{ number_format($game['aggregated_rating']) . '%' }}
-                                @else
-                                    0%
-                                @endif
-                            </div>
+                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
                         </div>
 
                         <div class="ml-4 text-xs">
@@ -100,11 +81,15 @@
                 </div>
 
                 <p class="max-w-3xl mt-6 text-gray-400">
-                    {{ $game['summary'] }}
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem,
+                    et doloremque! Quia ut
+                    maiores doloremque, deserunt consectetur temporibus illum sed laborum ea minus, saepe nesciunt,
+                    praesentium maxime. Debitis placeat nisi, similique praesentium omnis libero beatae! Illum veniam
+                    nobis odit veritatis perspiciatis ratione maiores. Magni quod enim, eum sapiente aliquid assumenda?
                 </p>
 
                 <div class="mt-12">
-                    {{-- <button
+                    <button
                         class="flex p-4 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -114,19 +99,7 @@
                         <span class="ml-2">
                             Play Trailer
                         </span>
-                    </button> --}}
-
-                    <a href="https://www.youtube.com/watch?v={{ $game['videos'][0]['video_id'] }}"
-                        class="inline-flex p-4 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-play">
-                            <polygon points="6 3 20 12 6 21 6 3" />
-                        </svg>
-                        <span class="ml-2">
-                            Play Trailer
-                        </span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div><!-- End Game Details -->

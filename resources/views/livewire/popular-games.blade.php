@@ -1,9 +1,10 @@
 <div class="grid grid-cols-1 gap-12 pb-16 text-sm border-b border-gray-800 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6">
     <!-- Popular Games -->
+
     @forelse ($popularGames as $game)
         <div class="mt-8">
             <div class="relative inline-block">
-                <a href="#">
+                <a href="{{ route('games.show', $game['slug']) }}">
                     <img src="{{ str_replace('thumb', 'cover_big', $game['cover']['url']) }}"
                         class="transition duration-150 ease-in-out hover:opacity-75">
                 </a>
@@ -15,7 +16,7 @@
                 </div>
             </div>
 
-            <a href="#"
+            <a href="{{ route('games.show', $game['slug']) }}"
                 class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">{{ $game['name'] }}</a>
             @if (!empty($game['platforms']))
                 <p class="mt-1 text-gray-400">
@@ -26,15 +27,17 @@
             @endif
         </div>
     @empty
-        <div>
-            <svg class="w-8 h-8 mt-8 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                </circle>
-                <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
-            </svg>
-        </div>
+        @foreach (range(1, 12) as $game)
+            <div class="mt-8">
+                <div class="relative inline-block">
+                    <a href="#">
+                        <div class="w-48 bg-gray-600 h-72"></div>
+                    </a>
+                </div>
+
+                <div href="#" class="block mt-4 text-lg text-transparent bg-gray-600 rounded">Game Title</div>
+                <div class="inline-block mt-1 text-transparent bg-gray-600 rounded">PC, PS5, Switch</div>
+            </div>
+        @endforeach
     @endforelse
 </div> <!-- End Popular Games -->

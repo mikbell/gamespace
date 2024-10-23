@@ -14,7 +14,7 @@
                     Most Anticipated
                 </h2>
 
-               <livewire:most-anticipated />
+                <livewire:most-anticipated />
 
                 <h2 class="mt-6 font-semibold text-blue-500 uppercase trackinkg-wide">
                     Coming Soon
@@ -22,6 +22,6 @@
 
                 <livewire:coming-soon />
             </div>
-        </div><!-- End Container -->
-    </div>
+        </div>
+    </div><!-- End Container -->
 </x-app-layout>
