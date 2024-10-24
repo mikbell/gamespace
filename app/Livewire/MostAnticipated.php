@@ -23,7 +23,7 @@ class MostAnticipated extends Component
         $afterSixMonths = Carbon::now()->addMonths(6)->timestamp;
 
 
-        $body = "fields name, cover.url, hypes, first_release_date;
+        $body = "fields name, cover.url, hypes, first_release_date, slug;
                 where (first_release_date >= {$current} & first_release_date < {$afterSixMonths});
                 sort hypes desc;
                 limit 4;";

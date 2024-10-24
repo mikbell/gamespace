@@ -22,7 +22,7 @@ class ComingSoon extends Component
         $current = Carbon::now()->timestamp;
 
         $query = "
-                fields name, cover.url, first_release_date;
+                fields name, cover.url, first_release_date, slug;
                 where (first_release_date >= {$current} & hypes > 5);
                 limit 4;
             ";

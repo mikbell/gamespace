@@ -7,7 +7,7 @@
         @foreach ($recentlyReviewed as $game)
             <div class="flex p-6 bg-gray-800 rounded-lg shadow-md"> <!-- Game -->
                 <div class="relative flex-none">
-                    <a href="#">
+                    <a href="{{ route('games.show', $game['slug']) }}">
                         <img src="{{ str_replace('thumb', 'cover_big', $game['cover']['url']) }}"
                             class="transition duration-150 ease-in-out hover:opacity-75">
                     </a>

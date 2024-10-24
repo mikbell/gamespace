@@ -28,7 +28,9 @@ class GamesController extends Controller
         $this->initializeLoadGamesTrait();
 
         $query = "
-            fields name, cover.url, genres.name, involved_companies.company.name, platforms.abbreviation, summary, videos.video_id, rating, first_release_date;
+            fields name, cover.url, genres.name, involved_companies.company.name,
+             platforms.abbreviation, summary, videos.video_id, rating, first_release_date,
+             screenshots.url, similar_games.name, similar_games.cover.url, similar_games.slug, similar_games.platforms.abbreviation;
             where slug = \"{$slug}\";
         ";
 

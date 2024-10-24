@@ -1,7 +1,7 @@
 <div class="mt-8 space-y-10"><!-- Coming Soon -->
     @foreach ($comingSoon as $game)
         <div class="flex"> <!-- Game -->
-            <a href="#">
+            <a href="{{ route('games.show', $game['slug']) }}">
                 @if (isset($game['cover']))
                     <img src="{{ str_replace('thumb', 'cover_small', $game['cover']['url']) }}"
                         class="transition duration-150 ease-in-out hover:opacity-75">

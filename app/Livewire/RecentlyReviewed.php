@@ -25,7 +25,7 @@ class RecentlyReviewed extends Component
 
 
         $query = "
-                fields name, cover.url, summary, first_release_date, rating, rating_count, platforms.abbreviation;
+                fields name, cover.url, summary, first_release_date, rating, rating_count, platforms.abbreviation, slug;
                 where (first_release_date > {$before} & first_release_date < {$current} & rating_count > 10);
                 limit 3;
             "

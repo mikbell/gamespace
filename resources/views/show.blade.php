@@ -137,12 +137,12 @@
             </h2>
 
             <div class="grid grid-cols-1 gap-12 mt-8 md:grid-cols-2 lg:grid-cols-3">
-                <div class="w-full h-64 transition duration-150 ease-in-out bg-gray-600 hover:opacity-75"></div>
-                <div class="w-full h-64 transition duration-150 ease-in-out bg-gray-600 hover:opacity-75"></div>
-                <div class="w-full h-64 transition duration-150 ease-in-out bg-gray-600 hover:opacity-75"></div>
-                <div class="w-full h-64 transition duration-150 ease-in-out bg-gray-600 hover:opacity-75"></div>
-                <div class="w-full h-64 transition duration-150 ease-in-out bg-gray-600 hover:opacity-75"></div>
-                <div class="w-full h-64 transition duration-150 ease-in-out bg-gray-600 hover:opacity-75"></div>
+                @foreach ($game['screenshots'] as $screenshot)
+                    <a href="{{ str_replace('thumb', 'screenshot_huge', $screenshot['url']) }}">
+                        <img src="{{ str_replace('thumb', 'screenshot_huge', $screenshot['url']) }}" alt="screenshot"
+                            class="transition duration-150 ease-in-out hover:opacity-75">
+                    </a>
+                @endforeach
             </div>
         </div> <!-- End Game Images -->
 
@@ -153,113 +153,27 @@
             </h2>
 
             <div class="grid grid-cols-1 gap-12 text-sm md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6">
-                <div class="mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <div class="w-48 transition duration-150 ease-in-out bg-gray-600 h-72 hover:opacity-75">
-                            </div>
-                        </a>
-
-                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
+                @foreach ($game['similar_games'] as $game)
+                    <div class="mt-8">
+                        <div class="relative inline-block">
+                            <a href="{{ route('games.show', $game['slug']) }}">
+                                <img src="{{ str_replace('thumb', 'cover_big', $game['cover']['url']) }}"
+                                    class="transition duration-150 ease-in-out hover:opacity-75">
+                            </a>
                         </div>
+
+                        <a href="{{ route('games.show', $game['slug']) }}"
+                            class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">{{ $game['name'] }}</a>
+                        @if (!empty($game['platforms']))
+                            <p class="mt-1 text-gray-400">
+                                @foreach ($game['platforms'] as $platform)
+                                    {{ $platform['abbreviation'] ?? 'N/A' }},
+                                @endforeach
+                            </p>
+                        @endif
                     </div>
-
-                    <a href="#"
-                        class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">Game
-                        Title</a>
-                    <div class="mt-1 text-gray-400">Playstation 4</div>
-                </div>
-
-                <div class="mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <div class="w-48 transition duration-150 ease-in-out bg-gray-600 h-72 hover:opacity-75">
-                            </div>
-                        </a>
-
-                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
-                        </div>
-                    </div>
-
-                    <a href="#"
-                        class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">Game
-                        Title</a>
-                    <div class="mt-1 text-gray-400">Playstation 4</div>
-                </div>
-
-                <div class="mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <div class="w-48 transition duration-150 ease-in-out bg-gray-600 h-72 hover:opacity-75">
-                            </div>
-                        </a>
-
-                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
-                        </div>
-                    </div>
-
-                    <a href="#"
-                        class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">Game
-                        Title</a>
-                    <div class="mt-1 text-gray-400">Playstation 4</div>
-                </div>
-
-                <div class="mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <div class="w-48 transition duration-150 ease-in-out bg-gray-600 h-72 hover:opacity-75">
-                            </div>
-                        </a>
-
-                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
-                        </div>
-                    </div>
-
-                    <a href="#"
-                        class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">Game
-                        Title</a>
-                    <div class="mt-1 text-gray-400">Playstation 4</div>
-                </div>
-
-                <div class="mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <div class="w-48 transition duration-150 ease-in-out bg-gray-600 h-72 hover:opacity-75">
-                            </div>
-                        </a>
-
-                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
-                        </div>
-                    </div>
-
-                    <a href="#"
-                        class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">Game
-                        Title</a>
-                    <div class="mt-1 text-gray-400">Playstation 4</div>
-                </div>
-
-                <div class="mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <div class="w-48 transition duration-150 ease-in-out bg-gray-600 h-72 hover:opacity-75">
-                            </div>
-                        </a>
-
-                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                            <div class="flex items-center justify-center h-full text-xs font-semibold">80%</div>
-                        </div>
-                    </div>
-
-                    <a href="#"
-                        class="block mt-8 text-base font-semibold leading-tight hover:text-gray-400">Game
-                        Title</a>
-                    <div class="mt-1 text-gray-400">Playstation 4</div>
-                </div>
+                @endforeach
             </div>
-        </div> <!-- End Container -->
+        </div>
+    </div> <!-- End Container -->
 </x-app-layout>
