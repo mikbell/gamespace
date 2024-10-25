@@ -28,10 +28,22 @@ class ComingSoon extends Component
             ";
 
         $this->comingSoon = $this->makeRequest('games', $query);
+
+        $this->comingSoon = $this->formatForView($this->comingSoon);
     }
 
     public function render()
     {
         return view('livewire.coming-soon');
+    }
+
+    private function formatForView($games)
+    {
+        return collect($games)->map(function ($game) {
+            return collect($game)->merge([
+                'coverImageUrl' => str_replace('thumb', 'cover_small', $game['cover']['url']) ?? null,
+                'releaseDate' => Carbon::parse($game['first_release_date'])->format('M d, Y')
+            ]);
+        })->toArray();
     }
 }

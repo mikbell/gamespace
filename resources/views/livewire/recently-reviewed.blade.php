@@ -8,24 +8,24 @@
             <div class="flex p-6 bg-gray-800 rounded-lg shadow-md"> <!-- Game -->
                 <div class="relative flex-none">
                     <a href="{{ route('games.show', $game['slug']) }}">
-                        <img src="{{ str_replace('thumb', 'cover_big', $game['cover']['url']) }}"
+                        <img src="{{ $game['coverImageUrl'] }}"
                             class="transition duration-150 ease-in-out hover:opacity-75">
                     </a>
 
-                    <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-900 rounded-full">
-                        <div class="flex items-center justify-center h-full text-xs font-semibold">
-                            {{ isset($game['rating']) ? number_format($game['rating']) : 'N/A' }}
+                    @if ($game['rating'])
+                        <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-900 rounded-full">
+                            <div class="flex items-center justify-center h-full text-xs font-semibold">
+                                {{ $game['rating'] }}
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
 
                 <div class="ml-8">
                     <a href="#"
                         class="block text-base font-semibold leading-tight hover:text-gray-400">{{ $game['name'] }}</a>
                     <div class="mt-1 text-gray-400">
-                        @foreach ($game['platforms'] as $platform)
-                            {{ $platform['abbreviation'] ?? 'N/A' }},
-                        @endforeach
+                        {{ $game['platforms'] }}
                     </div>
                     <p class="hidden mt-6 text-gray-400 lg:block">
                         {{ $game['summary'] }}

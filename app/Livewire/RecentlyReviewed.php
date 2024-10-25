@@ -12,7 +12,7 @@ class RecentlyReviewed extends Component
     use LoadGamesTrait;
 
     public array $recentlyReviewed = [];
-    
+
     public function mount()
     {
         $this->load();
@@ -33,10 +33,22 @@ class RecentlyReviewed extends Component
 
         $this->recentlyReviewed = $this->makeRequest('games', $query);
 
+        $this->recentlyReviewed = $this->formatForView($this->recentlyReviewed);
     }
 
     public function render()
     {
         return view('livewire.recently-reviewed');
+    }
+
+    private function formatForView($games)
+    {
+        return collect($games)->map(function ($game) {
+            return collect($game)->merge([
+                'coverImageUrl' => str_replace('thumb', 'cover_big', $game['cover']['url']) ?? null,
+                'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
+                'rating' => isset($game['rating']) ? round($game['rating']) . '%' : null
+            ]);
+        })->toArray();
     }
 }

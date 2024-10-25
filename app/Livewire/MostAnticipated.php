@@ -29,10 +29,22 @@ class MostAnticipated extends Component
                 limit 4;";
 
         $this->mostAnticipated = $this->makeRequest('games', $body);
+
+        $this->mostAnticipated = $this->formatForView($this->mostAnticipated);
     }
 
     public function render()
     {
         return view('livewire.most-anticipated');
+    }
+
+    private function formatForView($games)
+    {
+        return collect($games)->map(function ($game) {
+            return collect($game)->merge([
+                'coverImageUrl' => str_replace('thumb', 'cover_small', $game['cover']['url']) ?? null,
+                'releaseDate' => Carbon::parse($game['first_release_date'])->format('M d, Y')
+            ]);
+        })->toArray();
     }
 }

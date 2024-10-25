@@ -1,7 +1,8 @@
-<?php 
+<?php
 
 namespace App\Traits;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 
 trait LoadGamesTrait
