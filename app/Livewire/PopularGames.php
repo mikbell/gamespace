@@ -9,10 +9,7 @@ use App\Traits\LoadGamesTrait;
 class PopularGames extends Component
 {
     use LoadGamesTrait;
-    public function mount()
-    {
-        $this->load();
-    }
+
     public array $popularGames = [];
 
     public function load(int $limit = 12)
@@ -42,9 +39,9 @@ class PopularGames extends Component
     {
         return collect($games)->map(function ($game) {
             return collect($game)->merge([
-                'coverImageUrl' => str_replace('thumb', 'cover_big', $game['cover']['url']) ?? null,
+                'coverImageUrl' => isset($game['cover']['url']) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : null,
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
-                'rating' =>  isset($game['rating']) ? round($game['rating']).'%' : null
+                'rating' => isset($game['rating']) ? round($game['rating']) . '%' : null
             ]);
         })->toArray();
     }

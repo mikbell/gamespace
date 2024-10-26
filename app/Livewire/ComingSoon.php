@@ -12,11 +12,6 @@ class ComingSoon extends Component
 
     public array $comingSoon = [];
 
-    public function mount()
-    {
-        $this->load();
-    }
-
     public function load()
     {
         $current = Carbon::now()->timestamp;

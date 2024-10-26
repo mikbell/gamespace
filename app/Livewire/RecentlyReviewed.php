@@ -13,10 +13,6 @@ class RecentlyReviewed extends Component
 
     public array $recentlyReviewed = [];
 
-    public function mount()
-    {
-        $this->load();
-    }
 
     public function load()
     {

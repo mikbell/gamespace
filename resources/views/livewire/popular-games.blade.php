@@ -1,10 +1,11 @@
-<div class="grid grid-cols-1 gap-12 pb-16 text-sm border-b border-gray-800 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6">
+<div wire:init='load'
+    class="grid grid-cols-1 gap-12 pb-16 text-sm border-b border-gray-800 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6">
     <!-- Popular Games -->
 
     @forelse ($popularGames as $game)
         <div class="mt-8">
             <div class="relative inline-block">
-                <a href="{{ route('games.show', $game['slug']) }}">
+                <a wire:navigate href="{{ route('games.show', $game['slug']) }}">
                     <img src="{{ $game['coverImageUrl'] }}" class="transition duration-150 ease-in-out hover:opacity-75">
                 </a>
                 @if ($game['rating'])
@@ -25,14 +26,11 @@
     @empty
         @foreach (range(1, 12) as $game)
             <div class="mt-8">
-                <div class="relative inline-block">
-                    <a href="#">
-                        <div class="w-48 bg-gray-600 h-72"></div>
-                    </a>
-                </div>
+                <div class="bg-gray-600 w-52 h-72"></div>
 
-                <div href="#" class="block mt-4 text-lg text-transparent bg-gray-600 rounded">Game Title</div>
-                <div class="inline-block mt-1 text-transparent bg-gray-600 rounded">PC, PS5, Switch</div>
+                <div class="block mt-4 text-lg text-transparent bg-gray-600 rounded selection:hidden">Game Title</div>
+                <div class="inline-block mt-1 text-transparent bg-gray-600 rounded selection:hidden">PC, PS5, Switch
+                </div>
             </div>
         @endforeach
     @endforelse

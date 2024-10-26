@@ -1,10 +1,10 @@
-<div class="w-full mr-0 lg:mr-32 lg:w-3/4"><!-- Recently Reviewed -->
+<div wire:init="load" class="w-full mr-0 lg:mr-32 lg:w-3/4"><!-- Recently Reviewed -->
     <h2 class="font-semibold text-blue-500 uppercase trackinkg-wide">
         Recently Reviewed
     </h2>
 
     <div class="mt-8 space-y-12">
-        @foreach ($recentlyReviewed as $game)
+        @forelse ($recentlyReviewed as $game)
             <div class="flex p-6 bg-gray-800 rounded-lg shadow-md"> <!-- Game -->
                 <div class="relative flex-none">
                     <a href="{{ route('games.show', $game['slug']) }}">
@@ -32,6 +32,32 @@
                     </p>
                 </div>
             </div> <!-- End Game -->
-        @endforeach
+        @empty
+            @foreach (range(1, 3) as $game)
+                <div class="flex p-6 bg-gray-800 rounded-lg shadow-md"> <!-- Game -->
+                    <div class="relative flex-none">
+                        <div class="w-64 bg-gray-600 h-96"></div>
+                    </div>
+
+                    <div class="ml-8">
+                        <div
+                            class="block text-base leading-tight text-transparent bg-gray-600 rounded selection:hidden">
+                            Game
+                            Title</div>
+                        <div
+                            class="inline-block mt-1 leading-tight text-transparent bg-gray-600 rounded selection:hidden">
+                            platforms
+                        </div>
+                        <p class="hidden mt-6 text-transparent bg-gray-600 rounded lg:block selection:hidden">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores modi quos tempora nostrum
+                            amet velit atque numquam. Modi, mollitia. Iste laudantium, ut deserunt distinctio eaque
+                            dolore expedita repellat laboriosam totam minima, nostrum sit ducimus maiores necessitatibus
+                            commodi, est vel doloribus praesentium reiciendis quam quo. Eos voluptas quaerat saepe animi
+                            accusantium!
+                        </p>
+                    </div>
+                </div> <!-- End Game -->
+            @endforeach
+        @endforelse
     </div>
 </div><!-- End Recently Reviewed -->

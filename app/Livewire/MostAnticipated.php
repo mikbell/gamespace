@@ -13,10 +13,7 @@ class MostAnticipated extends Component
 
     public array $mostAnticipated = [];
 
-    public function mount()
-    {
-        $this->load();
-    }
+
     public function load()
     {
         $current = Carbon::now()->timestamp;
