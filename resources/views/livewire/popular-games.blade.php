@@ -3,34 +3,14 @@
     <!-- Popular Games -->
 
     @forelse ($popularGames as $game)
-        <div class="mt-8">
-            <div class="relative inline-block">
-                <a wire:navigate href="{{ route('games.show', $game['slug']) }}">
-                    <img src="{{ $game['coverImageUrl'] }}" class="transition duration-150 ease-in-out hover:opacity-75">
-                </a>
-                @if ($game['rating'])
-                    <div class="absolute bottom-0 right-0 w-16 h-16 -mb-5 -mr-5 bg-gray-800 rounded-full">
-                        <div class="flex items-center justify-center h-full text-xs font-semibold">
-                            {{ $game['rating'] }}
-                        </div>
-                    </div>
-                @endif
-            </div>
-
-            <a href="{{ route('games.show', $game['slug']) }}"
-                class="block mt-4 text-base font-semibold leading-tight hover:text-gray-400">{{ $game['name'] }}</a>
-            <p class="mt-1 text-gray-400">
-                {{ $game['platforms'] ?? 'N/A' }}
-            </p>
-        </div>
+        <x-game-card :game="$game" />
     @empty
         @foreach (range(1, 12) as $game)
-            <div class="mt-8">
-                <div class="bg-gray-600 w-52 h-72"></div>
+            <div class="mt-8 animate-pulse">
+                <div class="bg-gray-600 rounded-md w-52 h-72"></div> <!-- Image placeholder -->
 
-                <div class="block mt-4 text-lg text-transparent bg-gray-600 rounded selection:hidden">Game Title</div>
-                <div class="inline-block mt-1 text-transparent bg-gray-600 rounded selection:hidden">PC, PS5, Switch
-                </div>
+                <div class="block w-48 h-6 mt-4 bg-gray-600 rounded selection:hidden"></div> <!-- Title placeholder -->
+                <div class="inline-block w-32 h-4 mt-1 bg-gray-600 rounded selection:hidden"></div> <!-- Platforms placeholder -->
             </div>
         @endforeach
     @endforelse

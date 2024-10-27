@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\LoadGamesTrait;
+use Carbon\Carbon;
 use App\Services\IGDBService;
+use App\Traits\LoadGamesTrait;
 
 class GamesController extends Controller
 {
@@ -45,7 +46,7 @@ class GamesController extends Controller
             fields name, cover.url, genres.name, involved_companies.company.name,
             platforms.abbreviation, summary, videos.video_id, rating, first_release_date,
             screenshots.url, similar_games.name, similar_games.cover.url, similar_games.slug,
-            similar_games.platforms.abbreviation, websites.url, aggregated_rating;
+            similar_games.platforms.abbreviation, similar_games.rating, websites.url, aggregated_rating;
             where slug = \"{$slug}\";
         ";
 
@@ -57,11 +58,12 @@ class GamesController extends Controller
         return collect($games)->map(function ($game) {
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : asset('images/default-cover.png'),
+                'releaseDate' => isset($game['first_release_date']) ? Carbon::parse($game['first_release_date'])->format('M d, Y') : 'N/A',
                 'genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->implode(', ') : 'N/A',
                 'involvedCompanies' => isset($game['involved_companies']) ? collect($game['involved_companies'])->pluck('company.name')->implode(', ') : 'N/A',
                 'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : 'N/A',
-                'memberRating' => isset($game['rating']) ? round($game['rating']) . '%' : '0%',
-                'criticRating' => isset($game['aggregated_rating']) ? round($game['aggregated_rating']) . '%' : '0%',
+                'memberRating' => isset($game['rating']) ? round($game['rating']) : '0',
+                'criticRating' => isset($game['aggregated_rating']) ? round($game['aggregated_rating']) : '0',
                 'trailer' => isset($game['videos']) && count($game['videos']) > 0 ? 'https://www.youtube.com/watch?v=' . $game['videos'][0]['video_id'] : null,
                 'screenshots' => isset($game['screenshots']) && count($game['screenshots']) > 0 ? collect($game['screenshots'])->map(function ($screenshot) {
                     return [
@@ -73,15 +75,17 @@ class GamesController extends Controller
                     return collect($similarGame)->merge([
                         'coverImageUrl' => isset($similarGame['cover']['url']) ? str_replace('thumb', 'cover_big', $similarGame['cover']['url']) : null,
                         'platforms' => isset($similarGame['platforms']) ? collect($similarGame['platforms'])->pluck('abbreviation')->implode(', ') : 'N/A',
+                        'rating' => isset($similarGame['rating']) ? round($similarGame['rating']) : '0'
                     ]);
                 })->take(6) : collect(),
                 'social' => [
-                    'website' => collect($game['websites'])->first() ?? null,
-                    'instagram' => collect($game['websites'])->firstWhere('url', fn($url) => str_contains($url, 'instagram')) ?? null,
-                    'facebook' => collect($game['websites'])->firstWhere('url', fn($url) => str_contains($url, 'facebook')) ?? null,
-                    'twitter' => collect($game['websites'])->firstWhere('url', fn($url) => str_contains($url, 'twitter')) ?? null,
+                    'website' => isset($game['websites']) ? collect($game['websites'])->first() : null,
+                    'instagram' => isset($game['websites']) ? collect($game['websites'])->firstWhere('url', fn($url) => str_contains($url, 'instagram')) : null,
+                    'facebook' => isset($game['websites']) ? collect($game['websites'])->firstWhere('url', fn($url) => str_contains($url, 'facebook')) : null,
+                    'twitter' => isset($game['websites']) ? collect($game['websites'])->firstWhere('url', fn($url) => str_contains($url, 'twitter')) : null,
                 ],
             ]);
         })->toArray();
     }
+    
 }
