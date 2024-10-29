@@ -16,9 +16,14 @@ class GamesController extends Controller
         $this->igdbService = $igdbService;
     }
 
+    public function dashboard()
+    {
+        return view('games.dashboard');
+    }
+
     public function index()
     {
-        return view('index');
+        return view('games.index');
     }
 
     public function show($slug)
@@ -35,7 +40,7 @@ class GamesController extends Controller
 
         $game = $this->formatForView($game);
 
-        return view('show', [
+        return view('games.show', [
             'game' => $game[0] ?? [] // Assicurati di avere un array per la vista
         ]);
     }
@@ -43,7 +48,7 @@ class GamesController extends Controller
     private function fetchGameData($slug)
     {
         $query = "
-            fields name, cover.url, genres.name, involved_companies.company.name,
+            fields name, slug, cover.url, genres.name, involved_companies.company.name,
             platforms.abbreviation, summary, videos.video_id, rating, first_release_date,
             screenshots.url, similar_games.name, similar_games.cover.url, similar_games.slug,
             similar_games.platforms.abbreviation, similar_games.rating, websites.url, aggregated_rating;
@@ -64,6 +69,7 @@ class GamesController extends Controller
                 'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : 'N/A',
                 'memberRating' => isset($game['rating']) ? round($game['rating']) : '0',
                 'criticRating' => isset($game['aggregated_rating']) ? round($game['aggregated_rating']) : '0',
+                'summary' => isset($game['summary']) ? $game['summary'] : 'N/A',
                 'trailer' => isset($game['videos']) && count($game['videos']) > 0 ? 'https://www.youtube.com/embed/' . $game['videos'][0]['video_id'] : null,
                 'screenshots' => isset($game['screenshots']) && count($game['screenshots']) > 0 ? collect($game['screenshots'])->map(function ($screenshot) {
                     return [

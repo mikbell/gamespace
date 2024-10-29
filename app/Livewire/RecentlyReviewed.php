@@ -41,7 +41,7 @@ class RecentlyReviewed extends Component
     {
         return collect($games)->map(function ($game) {
             return collect($game)->merge([
-                'coverImageUrl' => str_replace('thumb', 'cover_big', $game['cover']['url']) ?? null,
+                'coverImageUrl' => str_replace('thumb', 'cover_big', $game['cover']['url']) ?? asset('images/default-cover.png'),
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
                 'rating' => isset($game['rating']) ? round($game['rating']) . '%' : null
             ]);

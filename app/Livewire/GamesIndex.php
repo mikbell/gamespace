@@ -6,39 +6,42 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Traits\LoadGamesTrait;
 
-class PopularGames extends Component
+class GamesIndex extends Component
 {
     use LoadGamesTrait;
 
-    public array $popularGames = [];
+    public array $allGames = [];
     public bool $isLoading = false;
 
     protected $listeners = [
         'dataLoadError' => 'handleDataLoadError',
     ];
 
-    public function load(int $limit = 12)
+    public function load(int $limit = 96) // imposta un limite ragionevole per non sovraccaricare la richiesta
     {
-        $this->isLoading = true;
+        $this->isLoading = true; // Inizia il caricamento
+
+        $now = Carbon::now()->timestamp;
+
 
         try {
-            $before = Carbon::now()->subMonths(2)->timestamp;
-            $after = Carbon::now()->addMonths(2)->timestamp;
-
             $query = "
                 fields name, cover.url, first_release_date, rating, platforms.abbreviation, slug;
-                where (first_release_date > {$before} & first_release_date < {$after});
+                where (first_release_date < {$now});
                 sort rating desc;
                 limit {$limit};
             ";
 
-            $popularGamesRaw = $this->makeRequest('games', $query);
-            $this->popularGames = $this->formatForView($popularGamesRaw);
+            $allGamesRaw = $this->makeRequest('games', $query);
+            $this->allGames = $this->formatForView($allGamesRaw);
 
-            collect($this->popularGames)->filter(function ($game) {
+            collect($this->allGames)->filter(function ($game) {
                 return isset($game['rating']);
             })->each(function ($game) {
+                // Logga il valore di rating per confermare che esiste e che è corretto
+                \Log::info('Emettendo evento per gioco con rating: ', ['rating' => $game['rating']]);
 
+                // Passa il valore del rating come parte di un array associativo
                 $this->dispatch('gameWithRatingAdded', [
                     'slug' => $game['slug'],
                     'rating' => $game['rating'],
@@ -46,12 +49,11 @@ class PopularGames extends Component
             });
 
         } catch (\Exception $e) {
-            $this->dispatch('data-load-error', ['message' => 'Unable to load popular games.']);
+            $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
         } finally {
-            $this->isLoading = false;
+            $this->isLoading = false; // Ferma il caricamento
         }
     }
-
 
     public function handleDataLoadError($message)
     {
@@ -60,7 +62,7 @@ class PopularGames extends Component
 
     public function render()
     {
-        return view('livewire.popular-games', ['isLoading' => $this->isLoading]);
+        return view('livewire.games-index', ['isLoading' => $this->isLoading]);
     }
 
     private function formatForView($games)
@@ -74,4 +76,3 @@ class PopularGames extends Component
         })->toArray();
     }
 }
-

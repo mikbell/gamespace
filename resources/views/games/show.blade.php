@@ -4,32 +4,28 @@
             <img src="{{ $game['coverImageUrl'] }}" alt="{{ $game['name'] }} cover image" class="h-full rounded-lg">
             <div class="ml-0 lg:ml-12">
                 <h2 class="text-4xl font-semibold leading-tight">{{ $game['name'] }}</h2>
-                <p>{{ $game['releaseDate'] }}</p>
-                <p>{{ $game['genres'] }}</p>
-                <p>{{ $game['involvedCompanies'] }}</p>
-                <p>{{ $game['platforms'] }}</p>
+                <p>Release Date: {{ $game['releaseDate'] }}</p>
+                <p>Genres: {{ $game['genres'] }}</p>
+                <p>Publishers: {{ $game['involvedCompanies'] }}</p>
+                <p>Platforms: {{ $game['platforms'] }}</p>
 
                 <div class="flex flex-wrap items-center mt-8">
                     <div class="flex items-center">
                         <div id="memberRating" class="relative w-16 h-16 text-sm bg-gray-800 rounded-full">
-                            @push('scripts')
-                                @include('_rating', [
-                                    'slug' => 'memberRating',
-                                    'rating' => $game['memberRating'],
-                                    'event' => null,
-                                ])
-                            @endpush
+                            @include('_rating', [
+                                'slug' => 'memberRating',
+                                'rating' => $game['memberRating'],
+                                'event' => null,
+                            ])
                         </div>
                         <div class="ml-4 text-xs">Member <br> score</div>
 
                         <div id="criticRating" class="relative w-16 h-16 ml-12 text-sm bg-gray-800 rounded-full">
-                            @push('scripts')
-                                @include('_rating', [
-                                    'slug' => 'criticRating',
-                                    'rating' => $game['criticRating'],
-                                    'event' => null,
-                                ])
-                            @endpush
+                            @include('_rating', [
+                                'slug' => 'criticRating',
+                                'rating' => $game['criticRating'],
+                                'event' => null,
+                            ])
                         </div>
 
                         <div class="ml-4 text-xs">Critic <br> score</div>
@@ -85,12 +81,14 @@
             <h3 class="font-semibold tracking-wide text-blue-500 uppercase">Images</h3>
 
             <div class="grid grid-cols-1 gap-12 mt-8 md:grid-cols-2 lg:grid-cols-3">
-                @foreach ($game['screenshots'] as $screenshot)
+                @forelse ($game['screenshots'] as $screenshot)
                     <a @click.prevent="open = true; image = '{{ $screenshot['big'] }}'" href="#">
                         <img src="{{ $screenshot['big'] }}" alt="Screenshot of {{ $game['name'] }}"
                             class="transition duration-150 ease-in-out hover:opacity-75">
                     </a>
-                @endforeach
+                @empty
+                    <p>No screenshots available</p>
+                @endforelse
             </div>
 
             <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -100,13 +98,17 @@
             </div>
         </div> <!-- End Game Images -->
 
+        <livewire:game-comments :gameSlug="$game['slug']" />
+
         <div class="pb-12 mt-8"> <!-- Similar Games -->
             <h3 class="font-semibold tracking-wide text-blue-500 uppercase">Similar Games</h3>
 
             <div class="grid grid-cols-1 gap-12 text-sm md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6">
-                @foreach ($game['similarGames'] as $similarGame)
+                @forelse ($game['similarGames'] as $similarGame)
                     <x-game-card :game="$similarGame" />
-                @endforeach
+                @empty
+                    <p>No similar games available</p>
+                @endforelse
             </div>
         </div><!-- End Similar Games -->
     </div> <!-- End Container -->
