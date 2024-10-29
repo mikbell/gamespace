@@ -1,7 +1,11 @@
 <x-app-layout>
     <div class="container px-4 mx-auto">
-        <h2 class="font-semibold tracking-wide text-blue-500 uppercase">
+        <h2 class="mb-4 text-3xl font-semibold uppercase">
             Games
+        </h2>
+        
+        <h2 class="font-semibold tracking-wide text-blue-500 uppercase">
+            Most Voted
         </h2>
 
         @if (session()->has('error'))

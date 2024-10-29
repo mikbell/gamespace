@@ -14,11 +14,11 @@ class ComingSoon extends Component
 
     public function load()
     {
-        $current = Carbon::now()->timestamp;
+        $now = Carbon::now()->timestamp;
 
         $query = "
                 fields name, cover.url, first_release_date, slug;
-                where (first_release_date >= {$current} & hypes > 5);
+                where (first_release_date >= {$now} & hypes > 5);
                 limit 4;
             ";
 

@@ -1,5 +1,10 @@
 <x-app-layout>
     <div class="container px-4 mx-auto"> <!--Container -->
+        <h2 class="mb-4 text-3xl font-semibold uppercase">
+            Dashboard
+        </h2>
+        
+        
         <h2 class="font-semibold text-blue-500 uppercase trackinkg-wide">
             Popular Games
         </h2>

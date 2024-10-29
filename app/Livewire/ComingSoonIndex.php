@@ -6,11 +6,11 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Traits\LoadGamesTrait;
 
-class GamesIndex extends Component
+class ComingSoonIndex extends Component
 {
     use LoadGamesTrait;
 
-    public array $allGames = [];
+    public array $comingSoon = [];
     public bool $isLoading = false;
     public int $currentPage = 1; // Aggiungi proprietà per la pagina corrente
     public int $perPage = 24; // Elementi per pagina
@@ -24,7 +24,7 @@ class GamesIndex extends Component
         $this->load(); // Carica i giochi al montaggio
     }
 
-    public function load() 
+    public function load()
     {
         $this->isLoading = true;
         $now = Carbon::now()->timestamp;
@@ -33,14 +33,14 @@ class GamesIndex extends Component
         try {
             $query = "
                 fields name, cover.url, first_release_date, rating, platforms.abbreviation, slug;
-                where (first_release_date < {$now});
+                where (first_release_date >= {$now} & hypes > 5);
                 sort rating desc;
                 limit {$this->perPage};
                 offset {$offset};
             ";
 
-            $allGamesRaw = $this->makeRequest('games', $query);
-            $this->allGames = $this->formatForView($allGamesRaw);
+            $comingSoonRaw = $this->makeRequest('games', $query);
+            $this->comingSoon = $this->formatForView($comingSoonRaw);
 
         } catch (\Exception $e) {
             $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
@@ -70,9 +70,9 @@ class GamesIndex extends Component
 
     public function render()
     {
-        return view('livewire.games-index', [
+        return view('livewire.coming-soon-index', [
             'isLoading' => $this->isLoading,
-            'allGames' => $this->allGames,
+            'comingSoon' => $this->comingSoon,
             'currentPage' => $this->currentPage
         ]);
     }

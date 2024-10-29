@@ -51,7 +51,6 @@ trait LoadGamesTrait
             \Log::error("IGDB API Request failed: " . $e->getMessage());
             return [];
         }
-
     }
 
     private function generateCacheKey(string $endpoint, string $query)

@@ -26,6 +26,11 @@ class GamesController extends Controller
         return view('games.index');
     }
 
+    public function ComingSoon()
+    {
+        return view('games.coming-soon');
+    }
+
     public function show($slug)
     {
         // Inizializzazione manuale per il trait se necessaria
