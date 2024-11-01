@@ -4,12 +4,6 @@
             Popular Games
         </h2>
 
-        @if (session()->has('error'))
-            <div class="mb-4 text-red-600">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <livewire:popular-games-index />
     </div>
 </x-app-layout>

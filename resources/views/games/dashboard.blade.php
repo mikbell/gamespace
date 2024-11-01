@@ -37,8 +37,8 @@
                 </a>
                 <livewire:most-anticipated />
 
-                <a href="{{ route('games.coming-soon') }}" class="flex items-center text-blue-500 group">
-                    <h2 class="mt-6 font-semibold uppercase trackinkg-wide">
+                <a href="{{ route('games.coming-soon') }}" class="flex items-center mt-6 text-blue-500 group">
+                    <h2 class="font-semibold uppercase trackinkg-wide">
                         Coming Soon
                     </h2>
 

@@ -12,6 +12,7 @@ class MostAnticipatedIndex extends Component
 
     public array $mostAnticipated = [];
     public bool $isLoading = false;
+    public bool $hasMorePages = true;
     public int $currentPage = 1;
     public int $perPage = 24;
 
@@ -24,8 +25,12 @@ class MostAnticipatedIndex extends Component
         $this->load(); // Carica i giochi al montaggio
     }
 
-    public function load() 
+    public function load()
     {
+        if (!$this->hasMorePages) {
+            return; // Interrompe il caricamento se non ci sono più pagine
+        }
+
         $this->isLoading = true;
         $now = Carbon::now()->timestamp;
         $offset = ($this->currentPage - 1) * $this->perPage; // Calcola l'offset
@@ -40,7 +45,15 @@ class MostAnticipatedIndex extends Component
             ";
 
             $mostAnticipatedRaw = $this->makeRequest('games', $query);
-            $this->mostAnticipated = $this->formatForView($mostAnticipatedRaw);
+            $newGames = $this->formatForView($mostAnticipatedRaw);
+
+            // Blocca la paginazione se l'API restituisce meno del numero massimo di giochi
+            if (count($newGames) < $this->perPage) {
+                $this->hasMorePages = false;
+            }
+
+            // Aggiungi i nuovi giochi alla lista esistente
+            $this->mostAnticipated = array_merge($this->mostAnticipated, $newGames);
 
         } catch (\Exception $e) {
             $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
@@ -51,14 +64,8 @@ class MostAnticipatedIndex extends Component
 
     public function nextPage()
     {
-        $this->currentPage++;
-        $this->load();
-    }
-
-    public function previousPage()
-    {
-        if ($this->currentPage > 1) {
-            $this->currentPage--;
+        if ($this->hasMorePages) {
+            $this->currentPage++;
             $this->load();
         }
     }
@@ -73,13 +80,14 @@ class MostAnticipatedIndex extends Component
         return view('livewire.most-anticipated-index', [
             'isLoading' => $this->isLoading,
             'mostAnticipated' => $this->mostAnticipated,
-            'currentPage' => $this->currentPage
+            'currentPage' => $this->currentPage,
+            'hasMorePages' => $this->hasMorePages
         ]);
     }
 
     private function formatForView($games)
     {
-        return collect($games)->map(function ($game) {
+        return collect($games)->unique('id')->map(function ($game) {
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : asset('images/default-cover.png'),
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
@@ -87,4 +95,5 @@ class MostAnticipatedIndex extends Component
             ]);
         })->toArray();
     }
+
 }

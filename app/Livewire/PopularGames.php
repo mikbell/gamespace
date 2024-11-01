@@ -23,11 +23,11 @@ class PopularGames extends Component
 
         try {
             $before = Carbon::now()->subMonths(2)->timestamp;
-            $after = Carbon::now()->addMonths(2)->timestamp;
+            $now = Carbon::now()->timestamp;
 
             $query = "
                 fields name, cover.url, first_release_date, rating, platforms.abbreviation, slug;
-                where (first_release_date > {$before} & first_release_date < {$after});
+                where (first_release_date > {$before} & first_release_date < {$now});
                 sort rating desc;
                 limit {$limit};
             ";
@@ -51,7 +51,6 @@ class PopularGames extends Component
             $this->isLoading = false;
         }
     }
-
 
     public function handleDataLoadError($message)
     {
