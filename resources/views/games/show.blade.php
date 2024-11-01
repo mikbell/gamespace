@@ -35,8 +35,8 @@
                         @foreach ($game['social'] as $platform => $data)
                             @if (!empty($data) && isset($data['url']))
                                 <div class="flex items-center justify-center bg-gray-800 rounded-full">
-                                    <a href="{{ $data['url'] }}" aria-label="{{ ucfirst($platform) }}"
-                                        class="hover:text-gray-400">
+                                    <a target="_blank" href="{{ $data['url'] }}" aria-label="{{ ucfirst($platform) }}"
+                                        class="transition duration-150 ease-in-out hover:text-gray-400">
                                         @include("svg.{$platform}")
                                     </a>
                                 </div>
@@ -64,7 +64,7 @@
                     </div>
 
                     <!-- Modal -->
-                    <div x-show="open"
+                    <div x-cloak x-show="open"
                         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2">
                             <iframe width="100%" height="100%" src="{{ $game['trailer'] }}" frameborder="0"
@@ -91,7 +91,8 @@
                 @endforelse
             </div>
 
-            <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div x-cloak x-show="open"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                 <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2">
                     <img :src="image" class="absolute top-0 left-0 w-full h-full" />
                 </div>

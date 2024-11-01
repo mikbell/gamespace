@@ -28,7 +28,7 @@
                 <ul>
                     @foreach ($searchResults as $result)
                         <li class="border-b border-gray-700">
-                            <a wire:navigate href="{{ route('games.show', ['slug' => $result['slug']]) }}"
+                            <a  href="{{ route('games.show', ['slug' => $result['slug']]) }}"
                                 class="flex items-center px-4 py-2 transition duration-150 ease-in-out hover:bg-gray-700 "
                                 @if ($loop->last) @keydown.tab="isVisible = false" @endif>
                                 <img src="{{ $result['coverImageUrl'] }}" class="w-10" alt="cover">

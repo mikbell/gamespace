@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    protected $fillable = ['game_slug', 'content', 'author_name'];
-
-
+    use HasFactory;
+    
+    protected $fillable = ['game_slug', 'content', 'user_id'];
 
     public function user()
     {

@@ -2,22 +2,19 @@
 
 namespace Database\Factories;
 
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
- */
 class CommentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = Comment::class;
+
+    public function definition()
     {
         return [
-            //
+            'game_slug' => $this->faker->slug,
+            'content' => $this->faker->paragraph,
+            'user_id' => null, // Verrà impostato dal seeder
         ];
     }
 }

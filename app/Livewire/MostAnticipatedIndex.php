@@ -6,14 +6,14 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Traits\LoadGamesTrait;
 
-class ComingSoonIndex extends Component
+class MostAnticipatedIndex extends Component
 {
     use LoadGamesTrait;
 
-    public array $comingSoon = [];
+    public array $mostAnticipated = [];
     public bool $isLoading = false;
-    public int $currentPage = 1; // Aggiungi proprietà per la pagina corrente
-    public int $perPage = 24; // Elementi per pagina
+    public int $currentPage = 1;
+    public int $perPage = 24;
 
     protected $listeners = [
         'dataLoadError' => 'handleDataLoadError',
@@ -24,24 +24,23 @@ class ComingSoonIndex extends Component
         $this->load(); // Carica i giochi al montaggio
     }
 
-    public function load()
+    public function load() 
     {
         $this->isLoading = true;
         $now = Carbon::now()->timestamp;
-        $afterSixMonths = Carbon::now()->addMonths(6)->timestamp;
         $offset = ($this->currentPage - 1) * $this->perPage; // Calcola l'offset
 
         try {
             $query = "
                 fields name, cover.url, first_release_date, rating, hypes, platforms.abbreviation, slug;
-                where (first_release_date >= {$now} & first_release_date < {$afterSixMonths} & hypes > 5);
+                where (first_release_date >= {$now});
                 sort hypes desc;
                 limit {$this->perPage};
                 offset {$offset};
             ";
 
-            $comingSoonRaw = $this->makeRequest('games', $query);
-            $this->comingSoon = $this->formatForView($comingSoonRaw);
+            $mostAnticipatedRaw = $this->makeRequest('games', $query);
+            $this->mostAnticipated = $this->formatForView($mostAnticipatedRaw);
 
         } catch (\Exception $e) {
             $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
@@ -71,9 +70,9 @@ class ComingSoonIndex extends Component
 
     public function render()
     {
-        return view('livewire.coming-soon-index', [
+        return view('livewire.most-anticipated-index', [
             'isLoading' => $this->isLoading,
-            'comingSoon' => $this->comingSoon,
+            'mostAnticipated' => $this->mostAnticipated,
             'currentPage' => $this->currentPage
         ]);
     }

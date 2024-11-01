@@ -1,8 +1,16 @@
 <div wire:init="load" class="w-full mr-0 lg:mr-32 lg:w-3/4">
     <!-- Recently Reviewed -->
-    <h2 class="font-semibold tracking-wide text-blue-500 uppercase">
-        Recently Reviewed
-    </h2>
+    <a href="{{ route('games.recently-reviewed') }}" class="flex items-center text-blue-500 group">
+        <h2 class="font-semibold tracking-wide uppercase">
+            Recently Reviewed
+        </h2>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="h-5 transition duration-150 ease-in-out group-hover:translate-x-2">
+            <path d="m9 18 6-6-6-6" />
+        </svg>
+    </a>
 
     <div class="mt-8 space-y-12">
         @forelse ($recentlyReviewed as $game)

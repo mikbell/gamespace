@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Database\Seeders\CommentSeeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +19,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'a@a',
             'password' => Hash::make('asdfasdf'),
         ]);
+
+        $this->call(CommentSeeder::class);
+
     }
 }

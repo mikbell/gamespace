@@ -20,7 +20,7 @@
     <header class="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
         <nav class="container flex flex-col items-center justify-between px-4 py-6 mx-auto lg:flex-row">
             <div class="flex items-center">
-                <a href="{{route('dashboard')}}" wire:navigate class="flex items-center">
+                <a href="{{ route('dashboard') }}" class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-12">
                         <line x1="6" x2="10" y1="11" y2="11" />
@@ -35,48 +35,61 @@
                     </span> </a>
 
                 <ul class="flex items-center gap-8 ml-16">
-                    <li><x-nav-link href="{{ route('games.index') }}" :active="request()->routeIs('games.index')">Games</x-nav-link></li>
-                    <li><x-nav-link href="{{route('games.coming-soon')}}" :active="request()->routeIs('games.coming-soon')">Coming Soon</x-nav-link></li>
+                    <li>
+                        <x-nav-link href="{{ route('games.popular-games') }}" :active="request()->routeIs('games.popular-games')">Popular Games</x-nav-link>
+                    </li>
+                    <li>
+                        <x-nav-link href="{{ route('games.recently-reviewed') }}" :active="request()->routeIs('games.recently-reviewed')">Recently
+                            Reviewed</x-nav-link>
+                    </li>
+                    <li>
+                        <x-nav-link href="{{ route('games.most-anticipated') }}" :active="request()->routeIs('games.most-anticipated')">Most
+                            Anticipated</x-nav-link>
+                    </li>
+                    <li>
+                        <x-nav-link href="{{ route('games.coming-soon') }}" :active="request()->routeIs('games.coming-soon')">Coming Soon</x-nav-link>
+                    </li>
                 </ul>
             </div>
 
-            <div class="flex items-center mt-4 lg:mt-0">
+            <div class="flex items-center gap-4 mt-4 lg:mt-0">
                 <livewire:search-dropdown />
 
-            </div>
-            <div>
-                @guest
-                    <x-nav-link href="{{ route('login') }}">Login</x-nav-link>
-                    <x-nav-link href="{{ route('register') }}">Registrati</x-nav-link>
-                @else
-                    <x-dropdown align="right">
-                        <x-slot name="trigger">
-                            <button
-                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-transparent border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
-                                <div>{{ Auth::user()->name }}</div>
+                <div>
+                    @guest
+                        <x-nav-link href="{{ route('login') }}">Login</x-nav-link>
+                        <x-nav-link href="{{ route('register') }}">Registrati</x-nav-link>
+                    @else
+                        <x-dropdown align="right">
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-transparent border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
+                                    <div>{{ Auth::user()->name }}</div>
 
-                                <div class="ml-1">
-                                    <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-                        </x-slot>
+                                    <div class="ml-1">
+                                        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
 
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log
-                                Out</x-dropdown-link>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                @endguest
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log
+                                    Out</x-dropdown-link>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </x-slot>
+                        </x-dropdown>
+                    @endguest
+                </div>
             </div>
+
         </nav>
     </header>
 

@@ -1,4 +1,4 @@
-<a wire:navigate href="{{ route('games.show', $game['slug']) }}"
+<a href="{{ route('games.show', $game['slug']) }}"
     class="block max-w-xs mx-auto mt-8 transition duration-150 transform group hover:shadow-lg hover:-translate-y-1 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
     <div class="relative inline-block w-full">
         <img src="{{ $game['coverImageUrl'] }}" alt="{{ $game['name'] }} cover image"

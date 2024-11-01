@@ -4,28 +4,22 @@ namespace App\Livewire;
 
 use App\Models\Comment;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 
 class GameComments extends Component
 {
+    use WithPagination;
+
     public $gameSlug;
-    public $authorName;
     public $content;
-    public $comments = [];
     public $editingCommentId = null;
+
+    protected $paginationTheme = 'tailwind'; // Specifica il tema per la paginazione (opzionale)
 
     public function mount($gameSlug)
     {
         $this->gameSlug = $gameSlug;
-        $this->loadComments();
-    }
-
-    public function loadComments()
-    {
-        $this->comments = Comment::where('game_slug', $this->gameSlug)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->toArray();
     }
 
     public function addComment()
@@ -37,26 +31,26 @@ class GameComments extends Component
 
         $this->validate([
             'content' => 'required|min:3',
-            'authorName' => 'nullable|string|max:50',
         ]);
 
         Comment::create([
             'game_slug' => $this->gameSlug,
-            'content' => $this->content,
-            'author_name' => Auth::user()->name ?? 'Anonimo',
+            'content' => trim($this->content),
+            'user_id' => auth()->id(),
         ]);
 
         $this->resetFields();
-        $this->loadComments();
     }
 
     public function editComment($commentId)
     {
         $comment = Comment::find($commentId);
 
-        if ($comment) {
+        if ($comment && $comment->user_id === auth()->id()) { 
             $this->editingCommentId = $commentId;
             $this->content = $comment->content;
+        } else {
+            session()->flash('error', 'Non sei autorizzato a modificare questo commento.');
         }
     }
 
@@ -67,27 +61,40 @@ class GameComments extends Component
 
             $comment = Comment::find($this->editingCommentId);
 
+            if ($comment && $comment->user_id === auth()->id()) {
+                $comment->update(['content' => trim($this->content)]);
+                $this->resetFields();
+            } else {
+                session()->flash('error', 'Non sei autorizzato a modificare questo commento.');
+            }
         }
     }
 
     public function deleteComment($commentId)
     {
         $comment = Comment::find($commentId);
-        if ($comment) {
+        if ($comment && $comment->user_id === auth()->id()) {
             $comment->delete();
-            $this->loadComments();
+        } else {
+            session()->flash('error', 'Non sei autorizzato a eliminare questo commento.');
         }
     }
-    
+
     private function resetFields()
     {
         $this->content = '';
-        $this->authorName = '';
         $this->editingCommentId = null;
     }
 
     public function render()
     {
-        return view('livewire.game-comments');
+        $comments = Comment::with('user')
+            ->where('game_slug', $this->gameSlug)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5); // Imposta il numero di commenti per pagina
+
+        return view('livewire.game-comments', [
+            'comments' => $comments,
+        ]);
     }
 }

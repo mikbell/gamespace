@@ -6,14 +6,14 @@ use Carbon\Carbon;
 use Livewire\Component;
 use App\Traits\LoadGamesTrait;
 
-class GamesIndex extends Component
+class RecentlyReviewedIndex extends Component
 {
     use LoadGamesTrait;
 
-    public array $allGames = [];
+    public array $recentlyReviewed = [];
     public bool $isLoading = false;
-    public int $currentPage = 1; // Aggiungi proprietà per la pagina corrente
-    public int $perPage = 24; // Elementi per pagina
+    public int $currentPage = 1;
+    public int $perPage = 24;
 
     protected $listeners = [
         'dataLoadError' => 'handleDataLoadError',
@@ -24,23 +24,23 @@ class GamesIndex extends Component
         $this->load(); // Carica i giochi al montaggio
     }
 
-    public function load() 
+    public function load()
     {
-        $this->isLoading = true;
-        $now = Carbon::now()->timestamp;
+        $before = Carbon::now()->subMonths(2)->timestamp;
+        $current = Carbon::now()->timestamp;
         $offset = ($this->currentPage - 1) * $this->perPage; // Calcola l'offset
 
         try {
             $query = "
-                fields name, cover.url, first_release_date, rating, platforms.abbreviation, slug;
-                where (first_release_date < {$now});
-                sort rating desc;
+                fields name, cover.url, first_release_date, rating, rating_count, total_rating_count, platforms.abbreviation, slug;
+                where (first_release_date > {$before} & first_release_date < {$current} & rating_count > 10);
+                sort total_rating_count desc;
                 limit {$this->perPage};
                 offset {$offset};
             ";
 
-            $allGamesRaw = $this->makeRequest('games', $query);
-            $this->allGames = $this->formatForView($allGamesRaw);
+            $recentlyReviewedRaw = $this->makeRequest('games', $query);
+            $this->recentlyReviewed = $this->formatForView($recentlyReviewedRaw);
 
         } catch (\Exception $e) {
             $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
@@ -70,9 +70,9 @@ class GamesIndex extends Component
 
     public function render()
     {
-        return view('livewire.games-index', [
+        return view('livewire.recently-reviewed-index', [
             'isLoading' => $this->isLoading,
-            'allGames' => $this->allGames,
+            'recentlyReviewed' => $this->recentlyReviewed,
             'currentPage' => $this->currentPage
         ]);
     }

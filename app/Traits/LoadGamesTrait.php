@@ -13,13 +13,17 @@ trait LoadGamesTrait
 
     public function initializeLoadGamesTrait()
     {
-        $this->client = new Client();
-        $this->accessToken = env('IGDB_ACCESS_TOKEN');
         $this->clientId = env('IGDB_CLIENT_ID');
+        $this->accessToken = env('IGDB_ACCESS_TOKEN');
 
-        if (is_null($this->accessToken) || is_null($this->clientId)) {
-            throw new \Exception('IGDB_ACCESS_TOKEN or IGDB_CLIENT_ID is not set in the environment.');
+        if (is_null($this->clientId) || is_null($this->accessToken)) {
+            throw new \Exception('IGDB_CLIENT_ID o IGDB_ACCESS_TOKEN non è impostato nell\'ambiente.');
         }
+    }
+
+    protected function getClient()
+    {
+        return $this->client ??= new Client();
     }
 
     private function makeRequest(string $endpoint, string $query)
@@ -31,9 +35,9 @@ trait LoadGamesTrait
         }
 
         try {
-            \Log::info("Sending request to IGDB", ['endpoint' => $endpoint, 'query' => $query]);
+            \Log::info("Invio richiesta a IGDB", ['endpoint' => $endpoint, 'query' => $query]);
 
-            $response = $this->client->request('POST', "https://api.igdb.com/v4/{$endpoint}", [
+            $response = $this->getClient()->request('POST', "https://api.igdb.com/v4/{$endpoint}", [
                 'headers' => [
                     'Client-ID' => $this->clientId,
                     'Authorization' => 'Bearer ' . $this->accessToken,
@@ -42,13 +46,15 @@ trait LoadGamesTrait
             ]);
 
             $data = json_decode($response->getBody(), true);
-            \Log::info("Response from IGDB", ['response' => $data]);
 
-            // Cache e restituzione dei dati
-            Cache::put($cacheKey, $data, now()->addSeconds(7));
+            if (!empty($data)) {
+                Cache::put($cacheKey, $data, now()->addMinutes(10)); // Caching per 10 minuti
+                \Log::info("Risposta da IGDB salvata nella cache", ['response' => $data]);
+            }
+
             return $data;
         } catch (\Exception $e) {
-            \Log::error("IGDB API Request failed: " . $e->getMessage());
+            \Log::error("Errore nella richiesta a IGDB: " . $e->getMessage());
             return [];
         }
     }

@@ -21,12 +21,22 @@ class GamesController extends Controller
         return view('games.dashboard');
     }
 
-    public function index()
+    public function popularGames()
     {
-        return view('games.index');
+        return view('games.popular-games');
     }
 
-    public function ComingSoon()
+    public function recentlyReviewed()
+    {
+        return view('games.recently-reviewed');
+    }
+
+    public function mostAnticipated()
+    {
+        return view('games.most-anticipated');
+    }
+
+    public function comingSoon()
     {
         return view('games.coming-soon');
     }

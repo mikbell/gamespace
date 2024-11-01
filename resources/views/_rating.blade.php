@@ -28,7 +28,7 @@
                     circle.path.setAttribute('stroke-width', state.width);
                     
                     var value = Math.round(circle.value() * 100);
-                    circle.setText(value === 0 ? '0%' : value + '%');
+                    circle.setText(value === 0 ? 'N/A' : value + '%');
                 }
             });
 

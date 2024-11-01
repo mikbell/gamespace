@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
-use GuzzleHttp\Client;
 use Livewire\Component;
 use App\Traits\LoadGamesTrait;
 
@@ -12,22 +11,25 @@ class MostAnticipated extends Component
     use LoadGamesTrait;
 
     public array $mostAnticipated = [];
+    public bool $isLoading = false;
 
 
     public function load()
     {
-        $current = Carbon::now()->timestamp;
-        $afterSixMonths = Carbon::now()->addMonths(6)->timestamp;
-
+        $this->isLoading = true;
+        
+        $now = Carbon::now()->timestamp;
 
         $body = "fields name, cover.url, hypes, first_release_date, slug;
-                where (first_release_date >= {$current} & first_release_date < {$afterSixMonths});
+                where (first_release_date >= {$now});
                 sort hypes desc;
                 limit 4;";
 
         $this->mostAnticipated = $this->makeRequest('games', $body);
 
         $this->mostAnticipated = $this->formatForView($this->mostAnticipated);
+
+        $this->isLoading = false;
     }
 
     public function render()
