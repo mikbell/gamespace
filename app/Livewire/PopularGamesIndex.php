@@ -38,7 +38,7 @@ class PopularGamesIndex extends Component
         try {
             $query = "
                 fields name, cover.url, first_release_date, rating, platforms.abbreviation, slug;
-                where (first_release_date > {$before} & first_release_date < {$after});
+                where (first_release_date > {$before} & first_release_date < {$after} & cover != null);
                 sort rating desc;
                 limit {$this->perPage};
                 offset {$offset};
@@ -59,12 +59,11 @@ class PopularGamesIndex extends Component
             }
     
         } catch (\Exception $e) {
-            $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
+            $this->dispatch('dataLoadError', ['message' => 'Unable to load all games.']);
         } finally {
             $this->isLoading = false;
         }
     }
-    
 
     public function nextPage()
     {
@@ -95,9 +94,9 @@ class PopularGamesIndex extends Component
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : asset('images/default-cover.png'),
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
-                'rating' => isset($game['rating']) ? round($game['rating']) : null
+                'rating' => isset($game['rating']) ? round($game['rating']) : null,
+                'releaseDate' => isset($game['first_release_date']) ? Carbon::parse($game['first_release_date'])->format('M d, Y') : 'N/A',
             ]);
         })->toArray();
     }
-    
 }

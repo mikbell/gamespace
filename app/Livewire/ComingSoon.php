@@ -18,9 +18,9 @@ class ComingSoon extends Component
         $afterSixMonths = Carbon::now()->addMonths(6)->timestamp;
 
         $query = "
-                fields name, cover.url, first_release_date, slug, hypes;
-                where (first_release_date >= {$now} & first_release_date < {$afterSixMonths} & hypes > 5);
-                sort hypes desc;
+                fields name, cover.url, first_release_date, slug;
+                where (first_release_date >= {$now} & first_release_date < {$afterSixMonths} & hypes > 10);
+                sort first_release_date asc;
                 limit 4;
             ";
 

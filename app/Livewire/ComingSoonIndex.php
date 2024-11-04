@@ -13,8 +13,8 @@ class ComingSoonIndex extends Component
     public array $comingSoon = [];
     public bool $isLoading = false;
     public bool $hasMorePages = true;
-    public int $currentPage = 1; // Aggiungi proprietà per la pagina corrente
-    public int $perPage = 24; // Elementi per pagina
+    public int $currentPage = 1;
+    public int $perPage = 24;
 
     protected $listeners = [
         'dataLoadError' => 'handleDataLoadError',
@@ -22,30 +22,31 @@ class ComingSoonIndex extends Component
 
     public function mount()
     {
-        $this->load(); // Carica i giochi al montaggio
+        $this->load();
     }
 
     public function load()
     {
         if (!$this->hasMorePages) {
-            return; // Interrompe il caricamento se non ci sono più pagine
+            return;
         }
 
         $this->isLoading = true;
         $now = Carbon::now()->timestamp;
-        $offset = ($this->currentPage - 1) * $this->perPage; // Calcola l'offset
+        $afterSixMonths = Carbon::now()->addMonths(6)->timestamp;
+        $offset = ($this->currentPage - 1) * $this->perPage;
 
         try {
             $query = "
-                fields name, cover.url, first_release_date, rating, hypes, platforms.abbreviation, slug;
-                where (first_release_date >= {$now});
-                sort hypes desc;
+                fields name, cover.url, first_release_date, rating, platforms.abbreviation, slug;
+                where (first_release_date >= {$now} & first_release_date < {$afterSixMonths} & hypes > 10);
+                sort first_release_date asc;
                 limit {$this->perPage};
                 offset {$offset};
             ";
 
-            $mostAnticipatedRaw = $this->makeRequest('games', $query);
-            $newGames = $this->formatForView($mostAnticipatedRaw);
+            $comingSoonRaw = $this->makeRequest('games', $query);
+            $newGames = $this->formatForView($comingSoonRaw);
 
             // Blocca la paginazione se l'API restituisce meno del numero massimo di giochi
             if (count($newGames) < $this->perPage) {
@@ -53,18 +54,18 @@ class ComingSoonIndex extends Component
             }
 
             // Unisci i nuovi giochi alla lista esistente ed elimina i duplicati
-            $this->mostAnticipated = collect(array_merge($this->mostAnticipated, $newGames))
-                ->unique('id') // Assicurati che 'id' sia la chiave giusta per l'unicità
-                ->values() // Ripristina gli indici dell'array
+            $this->comingSoon = collect($this->comingSoon)
+                ->merge($newGames)
+                ->unique('id')
+                ->values()
                 ->toArray();
 
         } catch (\Exception $e) {
-            $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
+            $this->dispatchBrowserEvent('data-load-error', ['message' => 'Unable to load all games.']);
         } finally {
             $this->isLoading = false;
         }
     }
-
 
     public function nextPage()
     {
@@ -95,10 +96,12 @@ class ComingSoonIndex extends Component
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : asset('images/default-cover.png'),
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
-                'rating' => isset($game['rating']) ? round($game['rating']) : null
+                'rating' => isset($game['rating']) ? round($game['rating']) : null,
+                'releaseDate' => isset($game['first_release_date']) ? Carbon::parse($game['first_release_date'])->format('M d, Y') : 'N/A',
+
             ]);
         })->toArray();
     }
-
 }
+
 

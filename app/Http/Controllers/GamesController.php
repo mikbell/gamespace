@@ -3,19 +3,12 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Services\IGDBService;
 use App\Traits\LoadGamesTrait;
 
 class GamesController extends Controller
 {
     use LoadGamesTrait;
-    protected $igdbService;
-
-    public function __construct(IGDBService $igdbService)
-    {
-        $this->igdbService = $igdbService;
-    }
-
+    
     public function dashboard()
     {
         return view('games.dashboard');

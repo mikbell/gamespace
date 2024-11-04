@@ -14,20 +14,21 @@ class GameComments extends Component
     public $gameSlug;
     public $content;
     public $editingCommentId = null;
+    public $confirmingCommentId = null; // Per il modal di conferma
 
-    protected $paginationTheme = 'tailwind'; // Specifica il tema per la paginazione (opzionale)
+    protected $paginationTheme = 'tailwind';
 
     public function mount($gameSlug)
     {
         $this->gameSlug = $gameSlug;
+        if (!Auth::check()) {
+            session()->flash('error', 'Devi essere autenticato per visualizzare o lasciare commenti.');
+        }
     }
 
     public function addComment()
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per lasciare un commento.');
-            return;
-        }
+        if (!$this->isAuthenticated()) return;
 
         $this->validate([
             'content' => 'required|min:3',
@@ -39,11 +40,14 @@ class GameComments extends Component
             'user_id' => auth()->id(),
         ]);
 
-        $this->resetFields();
+        $this->reset('content');
+        session()->flash('success', 'Commento aggiunto con successo.');
     }
 
     public function editComment($commentId)
     {
+        if (!$this->isAuthenticated()) return;
+
         $comment = Comment::find($commentId);
 
         if ($comment && $comment->user_id === auth()->id()) { 
@@ -54,36 +58,47 @@ class GameComments extends Component
         }
     }
 
-    public function updateComment()
+    public function confirmDelete($commentId)
     {
-        if ($this->editingCommentId) {
-            $this->validate(['content' => 'required|min:3']);
+        if (!$this->isAuthenticated()) return;
 
-            $comment = Comment::find($this->editingCommentId);
-
-            if ($comment && $comment->user_id === auth()->id()) {
-                $comment->update(['content' => trim($this->content)]);
-                $this->resetFields();
-            } else {
-                session()->flash('error', 'Non sei autorizzato a modificare questo commento.');
-            }
-        }
-    }
-
-    public function deleteComment($commentId)
-    {
         $comment = Comment::find($commentId);
+
         if ($comment && $comment->user_id === auth()->id()) {
-            $comment->delete();
+            $this->confirmingCommentId = $commentId; // Imposta l'ID per confermare l'eliminazione
         } else {
             session()->flash('error', 'Non sei autorizzato a eliminare questo commento.');
         }
     }
 
+    public function deleteComment()
+    {
+        if (!$this->confirmingCommentId) return;
+
+        $comment = Comment::find($this->confirmingCommentId);
+
+        if ($comment && $comment->user_id === auth()->id()) {
+            $comment->delete();
+            session()->flash('success', 'Commento eliminato con successo.');
+        } else {
+            session()->flash('error', 'Non sei autorizzato a eliminare questo commento.');
+        }
+
+        $this->confirmingCommentId = null; // Reset per chiudere il modal
+    }
+
+    private function isAuthenticated()
+    {
+        if (!Auth::check()) {
+            session()->flash('error', 'Devi essere autenticato per completare questa azione.');
+            return false;
+        }
+        return true;
+    }
+
     private function resetFields()
     {
-        $this->content = '';
-        $this->editingCommentId = null;
+        $this->reset(['content', 'editingCommentId']);
     }
 
     public function render()
@@ -91,7 +106,7 @@ class GameComments extends Component
         $comments = Comment::with('user')
             ->where('game_slug', $this->gameSlug)
             ->orderBy('created_at', 'desc')
-            ->paginate(5); // Imposta il numero di commenti per pagina
+            ->paginate(5);
 
         return view('livewire.game-comments', [
             'comments' => $comments,

@@ -28,12 +28,12 @@ class MostAnticipatedIndex extends Component
     public function load()
     {
         if (!$this->hasMorePages) {
-            return; // Interrompe il caricamento se non ci sono più pagine
+            return;
         }
 
         $this->isLoading = true;
         $now = Carbon::now()->timestamp;
-        $offset = ($this->currentPage - 1) * $this->perPage; // Calcola l'offset
+        $offset = ($this->currentPage - 1) * $this->perPage;
 
         try {
             $query = "
@@ -47,13 +47,15 @@ class MostAnticipatedIndex extends Component
             $mostAnticipatedRaw = $this->makeRequest('games', $query);
             $newGames = $this->formatForView($mostAnticipatedRaw);
 
-            // Blocca la paginazione se l'API restituisce meno del numero massimo di giochi
             if (count($newGames) < $this->perPage) {
                 $this->hasMorePages = false;
             }
 
-            // Aggiungi i nuovi giochi alla lista esistente
-            $this->mostAnticipated = array_merge($this->mostAnticipated, $newGames);
+            // Unisce i giochi nuovi, rimuovendo duplicati
+            $this->mostAnticipated = collect(array_merge($this->mostAnticipated, $newGames))
+                ->unique('id')
+                ->values()
+                ->toArray();
 
         } catch (\Exception $e) {
             $this->dispatch('data-load-error', ['message' => 'Unable to load all games.']);
@@ -91,7 +93,8 @@ class MostAnticipatedIndex extends Component
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : asset('images/default-cover.png'),
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
-                'rating' => isset($game['rating']) ? round($game['rating']) : null
+                'rating' => isset($game['rating']) ? round($game['rating']) : null,
+                'releaseDate' => isset($game['first_release_date']) ? Carbon::parse($game['first_release_date'])->format('M d, Y') : 'N/A',
             ]);
         })->toArray();
     }

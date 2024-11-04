@@ -5,7 +5,7 @@
         </h1>
 
         <a href="{{ route('games.popular-games') }}" class="flex items-center text-blue-500 group">
-            <h2 class="font-semibold uppercase trackinkg-wide" >
+            <h2 class="font-semibold uppercase trackinkg-wide">
                 Popular Games
             </h2>
 
