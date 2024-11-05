@@ -2,7 +2,10 @@
     <div class="grid grid-cols-1 gap-12 pb-16 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6">
 
         @forelse ($mostAnticipated as $game)
-            <x-game-card :game="$game" />
+            <div>
+                <x-game-card :game="$game" />
+                <p class="text-sm text-center text-gray-400">{{ $game['releaseDate'] }}</p>
+            </div>
         @empty
             @foreach (range(1, 18) as $game)
                 <x-game-card-skeleton />

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') ?? 'Page Title' }}</title>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -18,24 +19,28 @@
 <body class="text-white bg-gray-900">
     <header class="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
         <nav class="container flex flex-col items-center justify-between px-4 py-6 mx-auto lg:flex-row">
+            <!-- Logo & Navigation Links -->
             <div class="flex items-center">
                 <a href="{{ route('dashboard') }}" class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-12">
-                        <line x1="6" x2="10" y1="11" y2="11" />
-                        <line x1="8" x2="8" y1="9" y2="13" />
-                        <line x1="15" x2="15.01" y1="12" y2="12" />
-                        <line x1="18" x2="18.01" y1="10" y2="10" />
-                        <path
-                            d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />
-                    </svg>
-                    <span class="ml-2 text-2xl font-bold">
-                        {{ env('APP_NAME') }}
-                    </span> </a>
 
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="h-12">
+                            <line x1="6" x2="10" y1="11" y2="11" />
+                            <line x1="8" x2="8" y1="9" y2="13" />
+                            <line x1="15" x2="15.01" y1="12" y2="12" />
+                            <line x1="18" x2="18.01" y1="10" y2="10" />
+                            <path
+                                d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />
+                        </svg>
+
+                    <span class="ml-2 text-2xl font-bold">{{ env('APP_NAME') }}</span>
+                </a>
+
+                <!-- Primary Navigation -->
                 <ul class="flex items-center gap-8 ml-16">
                     <li>
-                        <x-nav-link href="{{ route('games.popular-games') }}" :active="request()->routeIs('games.popular-games')">Popular Games</x-nav-link>
+                        <x-nav-link href="{{ route('games.popular-games') }}" :active="request()->routeIs('games.popular-games')">Popular
+                            Games</x-nav-link>
                     </li>
                     <li>
                         <x-nav-link href="{{ route('games.recently-reviewed') }}" :active="request()->routeIs('games.recently-reviewed')">Recently
@@ -51,6 +56,7 @@
                 </ul>
             </div>
 
+            <!-- Search and User Authentication -->
             <div class="flex items-center gap-4 mt-4 lg:mt-0">
                 <livewire:search-dropdown />
 
@@ -59,20 +65,17 @@
                         <x-nav-link href="{{ route('login') }}">Login</x-nav-link>
                         <x-nav-link href="{{ route('register') }}">Registrati</x-nav-link>
                     @else
-                        <x-dropdown align="right">
+                        <x-dropdown align="right" class="relative">
                             <x-slot name="trigger">
                                 <button
-                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-transparent border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-transparent border border-transparent rounded-md hover:text-gray-400 focus:outline-none">
                                     <div>{{ Auth::user()->name }}</div>
-
-                                    <div class="ml-1">
-                                        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
+                                    <svg class="w-4 h-4 ml-1 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
                                 </button>
                             </x-slot>
 
@@ -88,7 +91,6 @@
                     @endguest
                 </div>
             </div>
-
         </nav>
     </header>
 
@@ -97,7 +99,7 @@
     </main>
 
     <footer class="border-t border-gray-800">
-        <div class="container px-4 py-6 mx-auto">
+        <div class="container px-4 py-6 mx-auto text-center text-gray-400">
             Powered by <a href="https://www.igdb.com/" class="underline hover:text-gray-300">IGDB API</a>
         </div>
     </footer>

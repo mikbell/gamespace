@@ -1,13 +1,10 @@
 <div wire:init="load" class="w-full mr-0 lg:mr-32 lg:w-3/4">
     <!-- Recently Reviewed -->
-    <a href="{{ route('games.recently-reviewed') }}" class="flex items-center text-blue-500 group">
-        <h2 class="font-semibold tracking-wide uppercase">
-            Recently Reviewed
-        </h2>
-
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="h-5 transition duration-150 ease-in-out group-hover:translate-x-2">
+    <a href="{{ route('games.recently-reviewed') }}" class="flex items-center text-blue-400 hover:text-blue-500 group">
+        <h2 class="font-semibold tracking-wide uppercase transition duration-200">Recently Reviewed</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            class="h-5 ml-2 transition duration-150 ease-in-out group-hover:translate-x-2">
             <path d="m9 18 6-6-6-6" />
         </svg>
     </a>
@@ -18,8 +15,7 @@
                 class="flex transition duration-150 bg-gray-800 rounded-md shadow-md group hover:bg-gray-700">
                 <!-- Game -->
                 <div class="relative flex-none">
-                    <img src="{{ $game['coverImageUrl'] }}"
-                        class="transition duration-150 ease-in-out rounded-md group-hover:opacity-75">
+                    <img src="{{ $game['coverImageUrl'] }}" class="rounded-md">
 
                     @if ($game['rating'])
                         <div

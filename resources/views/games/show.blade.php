@@ -6,7 +6,7 @@
                 <h2 class="text-4xl font-semibold leading-tight">{{ $game['name'] }}</h2>
                 <p>Release Date: {{ $game['releaseDate'] }}</p>
                 <p>Genres: {{ $game['genres'] }}</p>
-                <p>Publishers: {{ $game['involvedCompanies'] }}</p>
+                <p>Companies: {{ $game['involvedCompanies'] }}</p>
                 <p>Platforms: {{ $game['platforms'] }}</p>
 
                 <div class="flex flex-wrap items-center mt-8">

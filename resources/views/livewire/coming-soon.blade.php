@@ -1,4 +1,12 @@
 <div wire:init="load" class="mt-8 space-y-10"><!-- Coming Soon -->
+    <a href="{{ route('games.coming-soon') }}" class="flex items-center mt-6 text-blue-400 hover:text-blue-500 group">
+        <h2 class="font-semibold tracking-wide uppercase transition duration-200">Coming Soon</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            class="h-5 ml-2 transition duration-150 ease-in-out group-hover:translate-x-2">
+            <path d="m9 18 6-6-6-6" />
+        </svg>
+    </a>
     @forelse ($comingSoon as $game)
         <x-game-card-small :game="$game" />
     @empty
