@@ -26,8 +26,8 @@ trait LoadGamesTrait
             throw new \Exception('IGDB_CLIENT_ID o IGDB_ACCESS_TOKEN non è impostato nell\'ambiente.');
         }
 
-        $this->client = $this->client ?? new Client();
-        $this->logger = $this->logger ?? new Logger('igdb');
+        $this->client ??= new Client();
+        $this->logger ??= new Logger('igdb');
         $this->logger->pushHandler(new StreamHandler(storage_path('logs/igdb.log'), Logger::ERROR));
     }
 

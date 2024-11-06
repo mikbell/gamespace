@@ -14,15 +14,16 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 
 <body class="text-white bg-gray-900">
     <header class="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
-        <nav class="container flex flex-col items-center justify-between px-4 py-6 mx-auto lg:flex-row">
-            <!-- Logo & Navigation Links -->
-            <div class="flex items-center">
+        <nav class="container flex flex-col items-center justify-between px-4 py-6 mx-auto lg:flex-row"
+            x-data="{ open: false }">
+            <!-- Logo & Hamburger for Mobile -->
+            <div class="flex items-center justify-between w-full lg:w-auto">
                 <a href="{{ route('dashboard') }}" class="flex items-center">
-
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="h-12">
                         <line x1="6" x2="10" y1="11" y2="11" />
@@ -32,12 +33,25 @@
                         <path
                             d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />
                     </svg>
-
                     <span class="ml-2 text-2xl font-bold">{{ env('APP_NAME') }}</span>
                 </a>
 
-                <!-- Primary Navigation -->
-                <ul class="flex items-center gap-8 ml-16">
+                <!-- Hamburger Icon -->
+                <button @click="open = !open" class="text-gray-400 lg:hidden focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="lucide lucide-menu">
+                        <line x1="4" x2="20" y1="12" y2="12" />
+                        <line x1="4" x2="20" y1="6" y2="6" />
+                        <line x1="4" x2="20" y1="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <div :class="{ 'block': open, 'hidden': !open }"
+                class="w-full mt-4 lg:flex lg:items-center lg:w-auto lg:mt-0">
+                <ul class="flex flex-col gap-8 mt-6 text-center lg:flex-row lg:gap-8 lg:mt-0 lg:text-left">
                     <li>
                         <x-nav-link href="{{ route('games.popular-games') }}" :active="request()->routeIs('games.popular-games')">Popular
                             Games</x-nav-link>
@@ -62,7 +76,6 @@
             <!-- Search and User Authentication -->
             <div class="flex items-center gap-4 mt-4 lg:mt-0">
                 <livewire:search-dropdown />
-
                 <div>
                     @guest
                         <x-nav-link href="{{ route('login') }}">Login</x-nav-link>
