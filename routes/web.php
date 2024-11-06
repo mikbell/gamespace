@@ -11,6 +11,9 @@ Route::get('/popular-games', [GamesController::class, 'popularGames'])->name('ga
 Route::get('/recently-reviewed', [GamesController::class, 'recentlyReviewed'])->name('games.recently-reviewed');
 Route::get('/most-anticipated', [GamesController::class, 'mostAnticipated'])->name('games.most-anticipated');
 Route::get('/coming-soon', [GamesController::class, 'comingSoon'])->name('games.coming-soon');
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
 
 require __DIR__ . '/auth.php';
