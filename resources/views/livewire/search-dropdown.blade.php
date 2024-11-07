@@ -1,5 +1,5 @@
 <div class="relative" x-data="{ isVisible: true, activeIndex: -1 }" @click.outside="isVisible = false">
-    <input wire:model.debounce.500ms="search" wire:keyup="loadSearchResults" type="text" aria-label="Search games"
+    <input wire:model.debounce.500ms="search" wire:keydown="loadSearchResults" type="text" aria-label="Search games"
         class="w-64 px-3 py-1 pl-8 text-sm bg-gray-800 rounded-full" placeholder="Search (Press '/' to focus)"
         x-ref="search" @keydown.window="if(event.keyCode === 191) { event.preventDefault(); $refs.search.focus(); }"
         @focus="isVisible = true" @keydown.escape.window="isVisible = false" @keydown="isVisible = true"

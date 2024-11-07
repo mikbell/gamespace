@@ -1,6 +1,6 @@
 <x-app-layout>
     <div
-        class="mb-4 h-[10rem] lg:h-[20rem] header-background flex items-center justify-center selection:hidden cursor-default drop-shadow-xl">
+        class="mb-4 h-[10rem] lg:h-[20rem] header-background -mt-8 flex items-center justify-center selection:hidden cursor-default w-full">
         <div class="flex items-center px-6 bg-gray-900 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="h-12 lg:h-24">

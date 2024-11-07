@@ -40,7 +40,7 @@
                 <button @click="open = !open" class="text-gray-400 lg:hidden focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="lucide lucide-menu">
+                        stroke-linejoin="round">
                         <line x1="4" x2="20" y1="12" y2="12" />
                         <line x1="4" x2="20" y1="6" y2="6" />
                         <line x1="4" x2="20" y1="18" y2="18" />
@@ -51,7 +51,7 @@
             <!-- Navigation Links -->
             <div :class="{ 'block': open, 'hidden': !open }"
                 class="w-full mt-4 lg:flex lg:items-center lg:w-auto lg:mt-0">
-                <ul class="flex flex-col gap-8 mt-6 text-center lg:flex-row lg:gap-8 lg:mt-0 lg:text-left">
+                <ul class="flex flex-col gap-8 mt-6 lg:flex-row lg:gap-8 lg:mt-0 lg:text-left">
                     <li>
                         <x-nav-link href="{{ route('games.popular-games') }}" :active="request()->routeIs('games.popular-games')">Popular
                             Games</x-nav-link>

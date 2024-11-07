@@ -66,7 +66,7 @@
                     <!-- Modal -->
                     <div x-cloak x-show="open"
                         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2">
+                        <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2 md:h-3/4 lg:h-2/3 xl:h-2/3">
                             <iframe width="100%" height="100%" src="{{ $game['trailer'] }}" frameborder="0"
                                 allow="autoplay; encrypted-media" allowfullscreen
                                 class="absolute top-0 left-0 w-full h-full"></iframe>
@@ -93,8 +93,8 @@
 
             <div x-cloak x-show="open"
                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2">
-                    <img :src="image" class="absolute top-0 left-0 w-full h-full" />
+                <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2 md:h-3/4 lg:h-2/3">
+                    <img :src="image" class="absolute top-0 left-0 object-cover w-full h-full" />
                 </div>
             </div>
         </div> <!-- End Game Images -->
