@@ -1,4 +1,4 @@
-<a href="{{ route('games.show', $game['slug']) }}" class="flex mt-8 group"> <!-- Game -->
+<a href="{{ route('games.show', $game['slug']) }}" class="flex mt-8 transition duration-150 ease-in-out group hover:shadow-lg hover:-translate-y-1"> <!-- Game -->
     <div class="relative inline-block">
         <img src="{{ $game['coverImageUrl'] }}"
             alt="{{ $game['name'] }} cover image" 

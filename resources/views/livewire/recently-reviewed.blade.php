@@ -12,7 +12,7 @@
     <div class="mt-8 space-y-12">
         @forelse ($recentlyReviewed as $game)
             <a href="{{ route('games.show', $game['slug']) }}"
-                class="flex transition duration-150 bg-gray-800 rounded-md shadow-md group hover:bg-gray-700">
+                class="flex transition duration-150 ease-in-out bg-gray-800 rounded-md shadow-md group hover:bg-gray-700 hover:shadow-lg hover:-translate-y-1">
                 <!-- Game -->
                 <div class="relative flex-none">
                     <img src="{{ $game['coverImageUrl'] }}" class="rounded-md">

@@ -3,55 +3,36 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Rating;
 use App\Traits\LoadGamesTrait;
 
 class GamesController extends Controller
 {
     use LoadGamesTrait;
-    
-    public function dashboard()
+
+    public function showWishlist()
     {
-        return view('games.dashboard');
+        $wishlistGames = auth()->user()->wishlist()->get();
+        return view('wishlist.index', compact('wishlistGames'));
     }
 
-    public function popularGames()
-    {
-        return view('games.popular-games');
-    }
-
-    public function recentlyReviewed()
-    {
-        return view('games.recently-reviewed');
-    }
-
-    public function mostAnticipated()
-    {
-        return view('games.most-anticipated');
-    }
-
-    public function comingSoon()
-    {
-        return view('games.coming-soon');
-    }
 
     public function show($slug)
     {
-        // Inizializzazione manuale per il trait se necessaria
         $this->initializeLoadGamesTrait();
-
         $game = $this->fetchGameData($slug);
-
+    
         if (empty($game)) {
-            // Gestire il caso in cui il gioco non viene trovato
             abort(404, 'Game not found');
         }
-
+    
         $game = $this->formatForView($game);
-
+    
         return view('games.show', [
-            'game' => $game[0] ?? [] // Assicurati di avere un array per la vista
+            'game' => $game[0] ?? [],
         ]);
     }
+    
 
     private function fetchGameData($slug)
     {
@@ -101,5 +82,5 @@ class GamesController extends Controller
             ]);
         })->toArray();
     }
-    
+
 }

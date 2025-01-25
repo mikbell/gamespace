@@ -31,6 +31,7 @@
                         <div class="ml-4 text-xs">Critic <br> score</div>
                     </div>
 
+
                     <div class="flex gap-4 mt-4 lg:mt-0 lg:ml-12">
                         @foreach ($game['social'] as $platform => $data)
                             @if (!empty($data) && isset($data['url']))
@@ -43,9 +44,8 @@
                             @endif
                         @endforeach
                     </div>
-
                 </div>
-
+                
                 <p class="max-w-4xl mt-6 overflow-auto text-gray-400 max-h-32">
                     {{ $game['summary'] }}
                 </p>
@@ -66,16 +66,21 @@
                     <!-- Modal -->
                     <div x-cloak x-show="open"
                         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div @click.away="open = false" class="relative w-11/12 max-w-6xl mx-auto h-1/2 md:h-3/4 lg:h-2/3 xl:h-2/3">
+                        <div @click.away="open = false"
+                            class="relative w-11/12 max-w-6xl mx-auto h-1/2 md:h-3/4 lg:h-2/3 xl:h-2/3">
                             <iframe width="100%" height="100%" src="{{ $game['trailer'] }}" frameborder="0"
                                 allow="autoplay; encrypted-media" allowfullscreen
                                 class="absolute top-0 left-0 w-full h-full"></iframe>
                         </div>
                     </div>
                 </div>
-
             </div>
+
+            <livewire:wishlist-button :game-slug="$game['slug']" />
+
+
         </div><!-- End Game Details -->
+
 
         <div class="pb-12 mt-8 border-b border-gray-800" x-data="{ open: false, image: '' }"> <!-- Game Images -->
             <h3 class="font-semibold tracking-wide text-blue-500 uppercase">Images</h3>
